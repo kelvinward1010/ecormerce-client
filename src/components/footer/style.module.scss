@@ -1,0 +1,70 @@
+.container{
+    height: 100%;
+    background: teal;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+
+    .left{
+        width: 30%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        .iconlogo{
+            margin-top: -25px;
+        }
+    }
+
+    .center{
+        width: 100px;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        flex-direction: column;
+
+        .text{
+            color: white;
+            cursor: pointer;
+        }
+    }
+
+    .right{
+        width: 30%;
+        height: 100%;
+
+        .social{
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .send{
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            .inputemail{
+                max-width: 220px;
+            }
+
+            .button{
+                margin-top: 15px;
+                width: fit-content;
+                background: teal;
+                color: white;
+                border: 2px solid white;
+            }
+
+            .button:hover{
+                background: white;
+                color: teal;
+            }
+        }
+    }
+}
