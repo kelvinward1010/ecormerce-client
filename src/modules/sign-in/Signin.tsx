@@ -2,28 +2,48 @@
 import { Button, Form, Input, Typography, notification } from 'antd';
 import styles from './style.module.scss'
 import { useNavigate } from 'react-router-dom';
-import { WarningOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
+import { signIn } from '../../redux/actions/authAction';
+import { useEffect } from 'react';
 
 
 const { Title, Text } = Typography;
 
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 };
 
 export function Signin(): JSX.Element {
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
-  const onFinish = (values: any) => {
-
+  const onFinish = (values: FieldType) => {
     const data = {
       email: values.email,
       password: values.password
     }
-
-    console.log(data)
+    signIn(dispatch, data).then(() => {
+      notification.success({
+        message: "You have been sign in successfully!",
+        icon: (
+          <CheckCircleOutlined className="done" />
+        )
+      })
+      navigate('/')
+    }).catch((error) => {
+      notification.error({
+        message: `Could not sign in. Please try again!`,
+        description: ` ${error?.response?.data?.detail}`,
+        icon: (
+          <WarningOutlined className='warning' />
+        )
+      })
+    })
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -35,6 +55,12 @@ export function Signin(): JSX.Element {
       )
     })
   };
+
+  useEffect(() => {
+    if(isAuthenticated === true){
+      navigate('/')
+    }
+  },[isAuthenticated])
 
   return (
     <div className={styles.container}>

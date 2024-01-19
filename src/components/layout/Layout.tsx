@@ -1,9 +1,23 @@
+import { useSelector } from "react-redux";
 import { Footer } from "../footer/Footer";
 import Header from "../header/Header";
 import styles from "./style.module.scss";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { RootState } from "../../redux/store";
+import { useEffect } from "react";
 
 export function Layout(): JSX.Element {
+
+    const navigate = useNavigate();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+
+    useEffect(() => {
+        if(isAuthenticated === false) {
+            navigate('/sign_in')
+        }else{
+            navigate('/')
+        }
+    },[isAuthenticated])
 
     return (
         <div className={styles.container}>

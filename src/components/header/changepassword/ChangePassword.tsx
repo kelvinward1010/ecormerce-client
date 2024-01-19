@@ -125,11 +125,11 @@ function ChangePassword(props: Props) {
     const [fields, setFields] = useState<FieldData[]>([
         {
             name: ['name'],
-            value: '',
+            value: props.current_user?.name,
         },
         {
             name: ['email'],
-            value: '',
+            value: props.current_user?.email,
         },
         {
             name: ['old_password'],
@@ -169,7 +169,7 @@ function ChangePassword(props: Props) {
 
     return (
         <Modal
-            title={`Change Password of ${props.current_user?.email}`}
+            title={`Change Password of ${props.current_user?.name}`}
             open={props.isOpen} 
             onCancel={() => props.setIsOpen(false)}
             width={700}

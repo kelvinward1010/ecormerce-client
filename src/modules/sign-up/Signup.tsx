@@ -2,7 +2,11 @@
 import { Button, Form, Input, Typography, notification } from 'antd';
 import styles from './style.module.scss';
 import { useNavigate } from 'react-router-dom';
-import { WarningOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, WarningOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { signUp } from '../../redux/actions/authAction';
+import { RootState } from '../../redux/store';
+import { useEffect } from 'react';
 
 
 const { Title, Text } = Typography;
@@ -12,6 +16,7 @@ type FieldType = {
     email?: string;
     password?: string;
     confirmPassword?: string;
+    image?: string;
 };
 
 const formItemLayout = {
@@ -29,17 +34,35 @@ const formItemLayout = {
 export function Signup() {
 
     const [form] = Form.useForm();
-
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
 
 
     const onFinish = (values: any) => {
         const data = {
             name: values.name,
             email: values.email,
-            password: values.password
+            password: values.password,
+            image: values.image ?? "",
         }
-        console.log(data)
+        signUp(dispatch, data).then(() => {
+            notification.success({
+              message: "You have been sign up successfully!",
+              icon: (
+                <CheckCircleOutlined className="done" />
+              )
+            })
+            navigate('/')
+        }).catch((error) => {
+            notification.error({
+              message: `Could not sign up. Please try again!`,
+              description: ` ${error?.response?.data?.detail}`,
+              icon: (
+                <WarningOutlined className='warning' />
+              )
+            })
+        })
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -51,6 +74,12 @@ export function Signup() {
             )
         })
     };
+
+    useEffect(() => {
+        if(isAuthenticated === true){
+            navigate('/')
+        }
+    },[isAuthenticated])
 
     return (
         <div className={styles.container}>
@@ -112,6 +141,14 @@ export function Signup() {
                         ]}
                     >
                         <Input.Password />
+                    </Form.Item>
+
+                    <Form.Item<FieldType>
+                        label="Image"
+                        name="image"
+                        rules={[{ required: false, message: 'URL Image' }]}
+                    >
+                        <Input />
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
