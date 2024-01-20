@@ -9,6 +9,7 @@ import { IconFlare, IconShoppingCart } from "@tabler/icons-react";
 import { signOut } from "../../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import Profile from "./profile/Profile";
 
 
 function Header() {
@@ -16,6 +17,7 @@ function Header() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isOpenChangePassword, setIsOpenChangePassword] = useState(false);
+    const [isOpenUpdateProfile, setIsOpenUpdateProfile] = useState(false);
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
 
     const handleLogout = () => {
@@ -63,11 +65,21 @@ function Header() {
             label: <>
                 <ButtonConfig
                     type={'fullbg'}
+                    onClick={() => setIsOpenUpdateProfile(true)}
+                    name="Profile"
+                />
+            </>,
+            key: '2',
+        },
+        {
+            label: <>
+                <ButtonConfig
+                    type={'fullbg'}
                     onClick={() => setIsOpenChangePassword(true)}
                     name="Change Passowrd"
                 />
             </>,
-            key: '2',
+            key: '3',
         },
         {
             label: <>
@@ -77,7 +89,7 @@ function Header() {
                     name="Sign Out"
                 />
             </>,
-            key: '3',
+            key: '4',
         },
     ]
 
@@ -87,6 +99,11 @@ function Header() {
                 current_user={current_user}
                 isOpen={isOpenChangePassword}
                 setIsOpen={setIsOpenChangePassword}
+            />
+            <Profile
+                current_user={current_user}
+                isOpen={isOpenUpdateProfile}
+                setIsOpen={setIsOpenUpdateProfile}
             />
             <div className={styles.container}>
                 <div className={styles.header_left} onClick={() => navigate('/')}>
@@ -110,7 +127,7 @@ function Header() {
                         }}
                         trigger={['click']}
                     >
-                        <Avatar className={styles.avatar} icon={<UserOutlined />} />
+                        <Avatar className={styles.avatar} src={current_user?.image ?? null} icon={<UserOutlined />} />
                     </Dropdown>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { Button, Form, Input, Modal, notification } from "antd";
 import styles from "./style.module.scss";
 import { useState } from "react";
 import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
-import { update_password } from "../../../redux/actions/authAction";
+import { update_profile } from "../../../redux/actions/authAction";
 import { useDispatch } from "react-redux";
 
 
@@ -41,7 +41,7 @@ interface CustomizedFormProps {
 
 const CustomizedForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onFailure, onSubmit }) => (
     <Form
-        name="change password"
+        name="profile"
         {...formItemLayout}
         fields={fields}
         onFieldsChange={(_, allFields) => {
@@ -50,12 +50,18 @@ const CustomizedForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onFai
         onFinish={onSubmit}
         onFinishFailed={onFailure}
         initialValues={{
+            "name": fields.find(value => value?.value != null && value?.name == "name")?.value,
             "email": fields.find(value => value?.value != null && value?.name == "email")?.value,
-            "old_password": "",
-            "new_password": "",
-            "confirm_password": "",
+            "image": fields.find(value => value?.value != null && value?.name == "image")?.value,
         }}
     >
+        <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: 'Name is required!' }]}
+        >
+            <Input />
+        </Form.Item>
 
         <Form.Item
             name="email"
@@ -66,47 +72,16 @@ const CustomizedForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onFai
         </Form.Item>
 
         <Form.Item
-            name="old_password"
-            label="Old Password"
-            rules={[{ required: true, message: 'Old password is required!' }]}
+            name="image"
+            label="Image URL"
+            rules={[{ required: false, message: 'Image URL!' }]}
         >
-            <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-            name="new_password"
-            label="New Password"
-            rules={[{ required: true, message: 'New password is required!' }]}
-        >
-            <Input.Password />
-        </Form.Item>
-
-        <Form.Item
-            name="confirm_password"
-            label="Confirm Password"
-            dependencies={['new_password']}
-            hasFeedback
-            rules={[
-                {
-                    required: true,
-                    message: 'Please confirm your password!',
-                },
-                ({ getFieldValue }) => ({
-                    validator(_, value) {
-                        if (!value || getFieldValue('new_password') === value) {
-                            return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('The new password that you entered do not match!'));
-                    },
-                }),
-            ]}
-        >
-            <Input.Password />
+            <Input />
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 5, span: 14 }}>
             <Button className={styles.button} htmlType="submit">
-                Update Password
+                Update Profile
             </Button>
             <Button className={styles.button_reset} htmlType="reset">Reset</Button>
         </Form.Item>
@@ -114,36 +89,32 @@ const CustomizedForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onFai
 );
 
 
-function ChangePassword(props: Props) {
+function Profile(props: Props) {
 
     const dispatch = useDispatch();
     const [fields, setFields] = useState<FieldData[]>([
+        {
+            name: ['name'],
+            value: props.current_user?.name,
+        },
         {
             name: ['email'],
             value: props.current_user?.email,
         },
         {
-            name: ['old_password'],
-            value: '',
+            name: ['image'],
+            value: props.current_user?.image,
         },
-        {
-            name: ['new_password'],
-            value: '',
-        },
-        {
-            name: ['confirm_password'],
-            value: '',
-        }
     ]);
 
     const onFinish = (values: any) => {
         const data = {
+            name: values.name,
             email: values?.email,
-            old_password: values?.old_password,
-            password: values?.new_password
+            image: values?.image,
         }
 
-        update_password(dispatch, data, props.current_user.id).then(() => {
+        update_profile(dispatch, data, props.current_user.id,).then(() => {
             notification.success({
                 message: "You have been update password successfully!",
                 icon: (
@@ -195,4 +166,4 @@ function ChangePassword(props: Props) {
     )
 }
 
-export default ChangePassword
+export default Profile
