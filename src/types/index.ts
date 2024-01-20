@@ -5,4 +5,5 @@ export type ItemTypes = {
     image: string;
     price: number;
     stars: number;
+    created_at: string;
 }

@@ -14,8 +14,6 @@ export function Layout(): JSX.Element {
     useEffect(() => {
         if(isAuthenticated === false) {
             navigate('/sign_in')
-        }else{
-            navigate('/')
         }
     },[isAuthenticated])
 

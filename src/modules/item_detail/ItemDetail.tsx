@@ -1,14 +1,21 @@
 import { Col, Rate, Row, Typography } from "antd";
 import styles from "./style.module.scss";
 import ButtonConfig from "../../components/button/ButtonConfig";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { detailItem } from "../../redux/actions/itemAction";
+import { useParams } from "react-router-dom";
 
 const { Text } = Typography;
 
 export function ItemDetail() {
 
+    const dispatch = useDispatch();
+    const idParams = useParams().id;
     const [quantity, setQuantity] = useState<number>(1);
+    const item_detail = useSelector((state: RootState) => state.items.item_detail);
 
     const handlePlus = () => {
         setQuantity(quantity + 1)
@@ -20,24 +27,28 @@ export function ItemDetail() {
         }
     }
 
+    useEffect(() => {
+        detailItem(dispatch, idParams as string)
+    },[dispatch, idParams])
+
     return (
         <div className={styles.container}>
             <Row justify={'space-between'}>
                 <Col span={10} className={styles.left}>
                     <img 
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/1280px-24701-nature-natural-beauty.jpg" 
+                        src={item_detail?.image} 
                         alt="img" 
                         className={styles.img}
                     />
                 </Col>
                 <Col span={12} className={styles.right}>
                     <Typography.Title level={4} className={styles.title}>
-                        Title Item
+                        {item_detail?.name}
                     </Typography.Title>
                     <Text className={styles.description}>
-                        If the Ant Design grid layout component does not meet your needs, 
-                        you can use the excellent layout components of the community:
+                        {item_detail?.description}
                     </Text>
+                    <Text>Price:  {item_detail?.price}$</Text>
                     <Rate
                         allowHalf 
                         defaultValue={2.5} 

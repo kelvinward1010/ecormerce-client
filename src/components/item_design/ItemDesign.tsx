@@ -2,24 +2,30 @@ import { Card, Col, Rate, Row, Typography } from "antd";
 import { ItemTypes } from "../../types";
 import styles from "./style.module.scss";
 import { useNavigate } from "react-router-dom";
+import { format, parseISO } from "date-fns";
 
 const { Meta } = Card;
 const { Text } = Typography;
 
 interface ItemDesignProps {
-    item?: ItemTypes;
+    item: ItemTypes;
 }
 
 export const ItemDesign: React.FC<ItemDesignProps> = ({ item }) => {
     const navigate = useNavigate();
+
+    let date_string = item?.created_at;
+    let date = parseISO(date_string);
+    let formatted_date = format(date, 'dd/MM/yyyy');
+
     const description = (
         <div>
             <Row justify={'space-between'}>
                 <Col span={8}>
-                    <Text>Created At:</Text>
+                    <Text>Created:</Text>
                 </Col>
                 <Col span={16}>
-                    <Text>10/10/2020</Text>
+                    <Text>{formatted_date}</Text>
                 </Col>
             </Row>
             <Row justify={'space-between'}>
@@ -27,7 +33,7 @@ export const ItemDesign: React.FC<ItemDesignProps> = ({ item }) => {
                     <Text>Price:</Text>
                 </Col>
                 <Col span={16}>
-                    <Text className={styles.number_price}>100$</Text>
+                    <Text className={styles.number_price}>{item?.price}</Text>
                 </Col>
             </Row>
             <Row justify={'space-between'}>
@@ -54,13 +60,13 @@ export const ItemDesign: React.FC<ItemDesignProps> = ({ item }) => {
                 cover={
                     <img 
                         alt="example" 
-                        src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" 
+                        src={item?.image} 
                     />
                 }
-                onClick={() => navigate('/item_detail/abc')}
+                onClick={() => navigate(`/item_detail/${item?.id}`)}
             >
                 <Meta
-                    title="Europe Street beat" 
+                    title={item?.name}
                     description={description}
                 />
             </Card>

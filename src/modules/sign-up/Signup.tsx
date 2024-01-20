@@ -101,7 +101,7 @@ export function Signup() {
                         name="name"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Type your name'/>
                     </Form.Item>
 
                     <Form.Item<FieldType>
@@ -109,7 +109,7 @@ export function Signup() {
                         name="email"
                         rules={[{ required: true, message: 'Please input your email!' }]}
                     >
-                        <Input />
+                        <Input placeholder='Type your email'/>
                     </Form.Item>
 
                     <Form.Item<FieldType>
@@ -117,7 +117,7 @@ export function Signup() {
                         name="password"
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
-                        <Input.Password />
+                        <Input.Password placeholder='Type your password'/>
                     </Form.Item>
 
                     <Form.Item<FieldType>
@@ -140,7 +140,7 @@ export function Signup() {
                             }),
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password placeholder='Confirm your password'/>
                     </Form.Item>
 
                     <Form.Item<FieldType>
@@ -148,7 +148,7 @@ export function Signup() {
                         name="image"
                         rules={[{ required: false, message: 'URL Image' }]}
                     >
-                        <Input />
+                        <Input placeholder='Type image url'/>
                     </Form.Item>
 
                     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
