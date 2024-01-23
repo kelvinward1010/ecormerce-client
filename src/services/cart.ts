@@ -7,7 +7,7 @@ export const getDetailCart = async (email_user_cart: string): Promise<any> => {
     return res.data
 }
 
-interface ItemInCart {
+interface AddItemInCart {
     id: string,
     name: string,
     description: string,
@@ -16,7 +16,17 @@ interface ItemInCart {
     stars: any[],
 }
 
-export const addItemIntoCart = async (email_user_cart: string, item: ItemInCart): Promise<any> => {
+export const addItemIntoCart = async (email_user_cart: string, item: AddItemInCart): Promise<any> => {
     const res = await apiClient?.put(`${BASE_URL}${LOCAL_CARTS}/add_item_to_cart?email_user_cart=${email_user_cart}`, item);
+    return res.data
+}
+
+interface RemoveItemInCart {
+    email_user_cart: string,
+    id_item?: string,
+}
+
+export const removeItemIntoCart = async (data: RemoveItemInCart): Promise<any> => {
+    const res = await apiClient?.put(`${BASE_URL}${LOCAL_CARTS}/remove_item_in_cart`, data);
     return res.data
 }

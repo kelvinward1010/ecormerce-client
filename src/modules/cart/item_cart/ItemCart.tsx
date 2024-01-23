@@ -1,10 +1,14 @@
-import { Col, Row, Typography } from "antd";
+import { Col, Image, Row, Typography, notification } from "antd";
 import { ItemTypes } from "../../../types"
 import styles from "./style.module.scss"
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ButtonConfig from "../../../components/button/ButtonConfig";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { removeItemIntoCart } from "../../../services/cart";
+import { getDetailCart } from "../../../redux/actions/cartAction";
 
 interface ItemCartProps{
     item?: ItemTypes;
@@ -14,8 +18,10 @@ const { Text } = Typography;
 
 export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState<number>(1);
+    const current_user = useSelector((state: RootState) => state.auth.currentUser);
 
     const handlePlus = () => {
         setQuantity(quantity + 1)
@@ -27,34 +33,69 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
         }
     }
 
+    const handleRemoveItemCart = useCallback(() => {
+        removeItemIntoCart({
+            email_user_cart: current_user.email,
+            id_item: item?.id,
+        }).then(() => {
+            notification.success({
+              message: "Remove item in cart successfully!",
+              icon: (
+                <CheckCircleOutlined className="done" />
+              )
+            })
+            getDetailCart(dispatch, current_user.email)
+        }).catch((error) => {
+            notification.error({
+              message: `Could not remove item in cart. Please try again!`,
+              description: ` ${error?.response?.data?.detail}`,
+              icon: (
+                <WarningOutlined className='warning' />
+              )
+            })
+        })
+    },[current_user.email, item?.id])
+
     return (
         <div className={styles.container}>
             <Row>
                 <Col span={10} className={styles.left}>
-                    <img 
+                    <Image
+                        height={150}
                         src={item?.image} 
-                        alt="img" 
-                        className={styles.img_cart}
                     />
                 </Col>
                 <Col span={10} className={styles.right}>
-                    <Text 
-                        className={styles.name}
-                        onClick={() => navigate('/item_detail/abc')}
-                    >{item?.name}</Text>
                     <Row justify={'space-between'}>
-                        <Col span={10}>
+                        <Col span={14}>
+                            <Text 
+                                className={styles.name}
+                                onClick={() => navigate('/item_detail/abc')}
+                            >{item?.name}</Text>
+                        </Col>
+                        <Col span={9}>
+                            <ButtonConfig
+                                type={'fullbg'}
+                                onClick={handleRemoveItemCart}
+                                icon={<MinusOutlined />}
+                                with={'fit-content'}
+                                background={'red'}
+                            />
+                        </Col>
+                    </Row>
+                    <Row justify={'space-between'}>
+                        <Col span={14}>
                             <Text>Price:</Text>
                         </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                             <Text>{item?.price}$</Text>
                         </Col>
                     </Row>
                     <Row justify={'space-between'}>
-                        <Col span={10}>
+                        <Col span={14}>
                             <Text>Quantity:</Text>
                         </Col>
-                        <Col span={10}>
+                        <Col span={9}>
                             <div className={styles.quantity}>
                                 <ButtonConfig
                                     type={'fullbg'}

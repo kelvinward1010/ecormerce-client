@@ -2,29 +2,28 @@ import { Col, Row, Typography } from "antd";
 import styles from "./style.module.scss";
 import { ItemCart } from "./item_cart/ItemCart";
 import ButtonConfig from "../../components/button/ButtonConfig";
-import { useEffect, useState } from "react";
-import { getDetailCart } from "../../services/cart";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
+import { getDetailCart } from "../../redux/actions/cartAction";
 
 const { Text } = Typography;
 
 export function Cart() {
 
-    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
+    const items_cart = useSelector((state: RootState) => state.carts.carts)?.carts;
 
     useEffect(() => {
-        getDetailCart(current_user.email).then((res) => setData(res.data?.carts));
-    },[current_user,])
-
-    console.log(data)
+        getDetailCart(dispatch, current_user?.email)
+    },[dispatch])
 
     return (
         <div className={styles.container}>
             <Row>
                 <Col span={13} className={styles.left}>
-                    {data?.map((item: any) => (
+                    {items_cart?.map((item: any) => (
                         <ItemCart item={item} key={item?.id} />
                     ))}
                 </Col>
