@@ -11,7 +11,7 @@ interface HotItemsProps{
 export const HotItems: React.FC<HotItemsProps> = ({
     items
 }) => {
-    const data: any[] = items.slice(0,5);
+    const data: any[] = items?.slice(0,5);
     return (
         <div className={styles.container}>
             <Title className={styles.titlefix} level={4}>Hot Items</Title>

@@ -1,10 +1,11 @@
 import { Dispatch } from "@reduxjs/toolkit";
 import { apiClient } from "../../lib/api";
-import { LOCAL_AUTH, LOCAL_USERS } from "../../constant/config";
+import { LOCAL_AUTH, LOCAL_CARTS, LOCAL_USERS } from "../../constant/config";
 import { login, logout, register, update } from "../slices/authSlice";
 
 export const signUp = async (dispatch: Dispatch, credentials: { name: string, email: string; password: string, image: string }) => {
     const res = await apiClient.post(`/${LOCAL_AUTH}/register`, credentials);
+    await apiClient.post(`/${LOCAL_CARTS}/create_cart`, {carts: [], email_user_cart: credentials.email})
     dispatch(register(res.data))
     return res.data
 }

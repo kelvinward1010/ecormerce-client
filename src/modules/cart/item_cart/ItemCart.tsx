@@ -32,7 +32,7 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
             <Row>
                 <Col span={10} className={styles.left}>
                     <img 
-                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/24701-nature-natural-beauty.jpg/1280px-24701-nature-natural-beauty.jpg" 
+                        src={item?.image} 
                         alt="img" 
                         className={styles.img_cart}
                     />
@@ -41,13 +41,13 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
                     <Text 
                         className={styles.name}
                         onClick={() => navigate('/item_detail/abc')}
-                    >Name item cart</Text>
+                    >{item?.name}</Text>
                     <Row justify={'space-between'}>
                         <Col span={10}>
                             <Text>Price:</Text>
                         </Col>
                         <Col span={10}>
-                            <Text>100$</Text>
+                            <Text>{item?.price}$</Text>
                         </Col>
                     </Row>
                     <Row justify={'space-between'}>
