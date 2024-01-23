@@ -5,14 +5,16 @@ import { useCallback, useEffect, useState } from "react";
 import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { getDetailItem } from "../../services/item";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addItemIntoCart } from "../../services/cart";
 import { RootState } from "../../redux/store";
+import { getDetailCart } from "../../redux/actions/cartAction";
 
 const { Text } = Typography;
 
 export function ItemDetail() {
 
+    const dispatch = useDispatch();
     const idParams = useParams().id;
     const [quantity, setQuantity] = useState<number>(1);
     const [data, setData] = useState<any>();
@@ -47,6 +49,7 @@ export function ItemDetail() {
                 <CheckCircleOutlined className="done" />
               )
             })
+            getDetailCart(dispatch, current_user.email)
         }).catch((error) => {
             notification.error({
               message: `Could not add to cart. Please try again!`,

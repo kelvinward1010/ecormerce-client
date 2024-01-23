@@ -5,7 +5,7 @@ interface itemState {
 }
 
 const initialState: itemState = {
-    carts: [],
+    carts: null,
 };
 
 export const cartSlice = createSlice({
@@ -21,11 +21,15 @@ export const cartSlice = createSlice({
                 state.carts.push(item_add);
             }
         },
+        getAllInCarts: (state, action) => {
+            state.carts = action.payload.data;
+        }
     },
 });
 
 export const {
     additem,
+    getAllInCarts,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

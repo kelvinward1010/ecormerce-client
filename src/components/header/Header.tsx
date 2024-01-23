@@ -3,13 +3,14 @@ import styles from "./style.module.scss";
 import { Avatar, Badge, Dropdown, notification } from "antd";
 import { CheckCircleOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import ButtonConfig from "../button/ButtonConfig";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ChangePassword from "./changepassword/ChangePassword";
 import { IconFlare, IconShoppingCart } from "@tabler/icons-react";
 import { signOut } from "../../redux/actions/authAction";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Profile from "./profile/Profile";
+import { getDetailCart } from "../../redux/actions/cartAction";
 
 
 function Header() {
@@ -19,6 +20,11 @@ function Header() {
     const [isOpenChangePassword, setIsOpenChangePassword] = useState(false);
     const [isOpenUpdateProfile, setIsOpenUpdateProfile] = useState(false);
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
+    const items_cart = useSelector((state: RootState) => state.carts.carts);
+
+    useEffect(() => {
+        getDetailCart(dispatch, current_user.email)
+    },[dispatch])
 
     const handleLogout = () => {
         signOut(dispatch).then(() => {
@@ -112,7 +118,7 @@ function Header() {
                 </div>
                 <div className={styles.header_right}>
                     <Badge
-                        count={5}
+                        count={items_cart?.carts?.length}
                         size="small"
                         className={styles.cart}
                     >
