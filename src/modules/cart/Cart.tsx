@@ -32,8 +32,8 @@ export function Cart() {
     return (
         <div className={styles.container}>
             <Row>
-                <Col span={13} className={styles.left}>
-                    <Checkbox.Group onChange={onChange}>
+                <Col span={15} className={styles.left}>
+                    <Checkbox.Group onChange={onChange} className={styles.checkbox_group}>
                         {items_cart?.map((item: any) => (
                             <CheckBoxConfig data={item} key={item?.id}>
                                 <ItemCart item={item} />
@@ -41,7 +41,7 @@ export function Cart() {
                         ))}
                     </Checkbox.Group>
                 </Col>
-                <Col span={10} className={styles.right}>
+                <Col span={8} className={styles.right}>
                     <Typography.Title level={4}>
                         Your invoice
                     </Typography.Title>

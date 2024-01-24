@@ -14,6 +14,7 @@ interface AddItemInCart {
     image: string,
     price: number,
     stars: any[],
+    amount_in_stock: number,
 }
 
 export const addItemIntoCart = async (email_user_cart: string, item: AddItemInCart): Promise<any> => {

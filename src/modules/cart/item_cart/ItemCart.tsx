@@ -59,13 +59,13 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
     return (
         <div className={styles.container}>
             <Row>
-                <Col span={10} className={styles.left}>
+                <Col span={6} className={styles.left}>
                     <Image
                         height={150}
                         src={item?.image} 
                     />
                 </Col>
-                <Col span={10} className={styles.right}>
+                <Col span={17} className={styles.right}>
                     <Row justify={'space-between'}>
                         <Col span={14}>
                             <Text 
@@ -89,6 +89,14 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
                         </Col>
                         <Col span={9}>
                             <Text>{item?.price}$</Text>
+                        </Col>
+                    </Row>
+                    <Row justify={'space-between'}>
+                        <Col span={14}>
+                            <Text>Number of item in stock:</Text>
+                        </Col>
+                        <Col span={9}>
+                            <Text>{item?.amount_in_stock}$</Text>
                         </Col>
                     </Row>
                     <Row justify={'space-between'}>

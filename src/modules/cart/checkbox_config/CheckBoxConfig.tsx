@@ -14,9 +14,9 @@ export const CheckBoxConfig: React.FC<CheckBoxConfigProps> = ({
         <div className={styles.container}>
             <Row justify={'start'}>
                 <Col span={2} className={styles.checkboxx}>
-                    <Checkbox value={data} />
+                    <Checkbox className="checkbox_fix" value={data} />
                 </Col>
-                <Col span={22}>
+                <Col span={22} className={styles.children}>
                     {children}
                 </Col>
             </Row>
