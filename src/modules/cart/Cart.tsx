@@ -1,6 +1,5 @@
 import { Checkbox, Col, Row, Typography } from "antd";
 import styles from "./style.module.scss";
-import { ItemCart } from "./item_cart/ItemCart";
 import ButtonConfig from "../../components/button/ButtonConfig";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,8 +25,8 @@ export function Cart() {
     const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues) => {
         let prices = handleTotalPrice(checkedValues)
         setTotal(prices)
+        console.log(checkedValues)
     };
-
 
     return (
         <div className={styles.container}>
@@ -35,9 +34,7 @@ export function Cart() {
                 <Col span={15} className={styles.left}>
                     <Checkbox.Group onChange={onChange} className={styles.checkbox_group}>
                         {items_cart?.map((item: any) => (
-                            <CheckBoxConfig data={item} key={item?.id}>
-                                <ItemCart item={item} />
-                            </CheckBoxConfig>
+                            <CheckBoxConfig data={item} key={item?.id}/>
                         ))}
                     </Checkbox.Group>
                 </Col>

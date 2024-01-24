@@ -15,6 +15,7 @@ interface AddItemInCart {
     price: number,
     stars: any[],
     amount_in_stock: number,
+    quantity: number
 }
 
 export const addItemIntoCart = async (email_user_cart: string, item: AddItemInCart): Promise<any> => {
@@ -29,5 +30,16 @@ interface RemoveItemInCart {
 
 export const removeItemIntoCart = async (data: RemoveItemInCart): Promise<any> => {
     const res = await apiClient?.put(`${BASE_URL}${LOCAL_CARTS}/remove_item_in_cart`, data);
+    return res.data
+}
+
+interface UpdateQuantityItemIntoCart {
+    email_user_cart: string,
+    id_item?: string,
+    quantity?: number
+}
+
+export const updateQuantityItemIntoCart = async (data: UpdateQuantityItemIntoCart): Promise<any> => {
+    const res = await apiClient?.put(`${BASE_URL}${LOCAL_CARTS}/update_quantity_item_cart`, data);
     return res.data
 }

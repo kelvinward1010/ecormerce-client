@@ -2,7 +2,7 @@ import { Col, Rate, Row, Typography, notification } from "antd";
 import styles from "./style.module.scss";
 import ButtonConfig from "../../components/button/ButtonConfig";
 import { useCallback, useEffect, useState } from "react";
-import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { getDetailItem } from "../../services/item";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,10 +18,21 @@ export function ItemDetail() {
     const idParams = useParams().id;
     const [data, setData] = useState<any>();
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
+    const [quantity, setQuantity] = useState<number>(1);
 
     useEffect(() => {
         getDetailItem(idParams as string).then((res) => setData(res.data))
     },[idParams])
+
+    const handlePlus = () => {
+        setQuantity(quantity + 1)
+    }
+
+    const handleMinus = () => {
+        if(quantity > 1) {
+            setQuantity(quantity - 1)
+        }
+    }
 
     const handleAddToCart = useCallback(() => {
         addItemIntoCart(current_user?.email, {
@@ -32,6 +43,7 @@ export function ItemDetail() {
             image: data?.image,
             stars: data?.stars,
             amount_in_stock: data?.amount_in_stock,
+            quantity: quantity,
         }).then(() => {
             notification.success({
               message: "Added to cart successfully!",
@@ -49,7 +61,7 @@ export function ItemDetail() {
               )
             })
         })
-    },[ data])
+    },[data, quantity])
 
     return (
         <div className={styles.container}>
@@ -75,6 +87,21 @@ export function ItemDetail() {
                         className={styles.rate}
                     />
                     <Text>Number of item in stock: {data?.amount_in_stock}</Text>
+                    <div className={styles.quantity}>
+                        <ButtonConfig
+                            type={'fullbg'}
+                            onClick={handleMinus}
+                            icon={<MinusOutlined />}
+                            with={'fit-content'}
+                        />
+                        <Text className={styles.quantity_number}>{quantity}</Text>
+                        <ButtonConfig
+                            type={'fullbg'}
+                            onClick={handlePlus}
+                            icon={<PlusOutlined />}
+                            with={'fit-content'}
+                        />
+                    </div>
                     <div className={styles.add_cart}>
                         <ButtonConfig
                             onClick={handleAddToCart}

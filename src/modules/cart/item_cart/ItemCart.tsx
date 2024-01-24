@@ -7,31 +7,45 @@ import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } fro
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItemIntoCart } from "../../../services/cart";
+import { removeItemIntoCart, updateQuantityItemIntoCart } from "../../../services/cart";
 import { getDetailCart } from "../../../redux/actions/cartAction";
 
 interface ItemCartProps{
-    item?: ItemTypes;
+    item: ItemTypes;
 }
 
 const { Text } = Typography;
 
-export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
+export const ItemCart: React.FC<ItemCartProps> = ({ 
+    item,
+}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [quantity, setQuantity] = useState<number>(1);
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
+    const [quantity, setQuantity] = useState<number>(item?.quantity);
 
-    const handlePlus = () => {
+    const handlePlus = useCallback(() => {
         setQuantity(quantity + 1)
-    }
+        updateQuantityItemIntoCart({
+            email_user_cart: current_user.email,
+            id_item: item?.id,
+            quantity: quantity
+        })
+        getDetailCart(dispatch, current_user?.email)
+    },[quantity, setQuantity, dispatch])
 
-    const handleMinus = () => {
+    const handleMinus = useCallback(() => {
         if(quantity > 1) {
             setQuantity(quantity - 1)
         }
-    }
+        updateQuantityItemIntoCart({
+            email_user_cart: current_user.email,
+            id_item: item?.id,
+            quantity: quantity
+        })
+        getDetailCart(dispatch, current_user?.email)
+    },[quantity, setQuantity, dispatch])
 
     const handleRemoveItemCart = useCallback(() => {
         removeItemIntoCart({
@@ -96,7 +110,7 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
                             <Text>Number of item in stock:</Text>
                         </Col>
                         <Col span={9}>
-                            <Text>{item?.amount_in_stock}$</Text>
+                            <Text>{item?.amount_in_stock} items</Text>
                         </Col>
                     </Row>
                     <Row justify={'space-between'}>
@@ -111,7 +125,7 @@ export const ItemCart: React.FC<ItemCartProps> = ({ item }) => {
                                     icon={<MinusOutlined />}
                                     with={'fit-content'}
                                 />
-                                <Text className={styles.quantity_number}>{quantity}</Text>
+                                <Text className={styles.quantity_number}>{item?.quantity}</Text>
                                 <ButtonConfig
                                     type={'fullbg'}
                                     onClick={handlePlus}
