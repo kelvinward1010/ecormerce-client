@@ -1,11 +1,14 @@
-import { Col, Row, Typography } from "antd";
+import { Checkbox, Col, Row, Typography } from "antd";
 import styles from "./style.module.scss";
 import { ItemCart } from "./item_cart/ItemCart";
 import ButtonConfig from "../../components/button/ButtonConfig";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { getDetailCart } from "../../redux/actions/cartAction";
+import { CheckBoxConfig } from "./checkbox_config/CheckBoxConfig";
+import type { GetProp } from 'antd';
+import { handleTotalPrice } from "../../equation";
 
 const { Text } = Typography;
 
@@ -14,18 +17,29 @@ export function Cart() {
     const dispatch = useDispatch();
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
     const items_cart = useSelector((state: RootState) => state.carts.carts)?.carts;
+    const [total, setTotal] = useState<number>(0);
 
     useEffect(() => {
         getDetailCart(dispatch, current_user?.email)
-    },[dispatch])
+    }, [dispatch])
+
+    const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = (checkedValues) => {
+        let prices = handleTotalPrice(checkedValues)
+        setTotal(prices)
+    };
+
 
     return (
         <div className={styles.container}>
             <Row>
                 <Col span={13} className={styles.left}>
-                    {items_cart?.map((item: any) => (
-                        <ItemCart item={item} key={item?.id} />
-                    ))}
+                    <Checkbox.Group onChange={onChange}>
+                        {items_cart?.map((item: any) => (
+                            <CheckBoxConfig data={item} key={item?.id}>
+                                <ItemCart item={item} />
+                            </CheckBoxConfig>
+                        ))}
+                    </Checkbox.Group>
                 </Col>
                 <Col span={10} className={styles.right}>
                     <Typography.Title level={4}>
@@ -36,7 +50,7 @@ export function Cart() {
                             <Text>Price</Text>
                         </Col>
                         <Col span={10}>
-                            <Text>100$</Text>
+                            <Text>{total}$</Text>
                         </Col>
                     </Row>
                     <Row>
@@ -52,12 +66,12 @@ export function Cart() {
                             <Text>Total price.</Text>
                         </Col>
                         <Col span={10}>
-                            <Text>120$</Text>
+                            <Text>{total + 20}$</Text>
                         </Col>
                     </Row>
                     <div className={styles.button}>
-                        <ButtonConfig 
-                            name="Order"
+                        <ButtonConfig
+                            name="Next step"
                             type={'fullbg'}
                         />
                     </div>
