@@ -1,7 +1,7 @@
 import { Col, Image, Row, Typography, notification } from "antd";
 import { ItemTypes } from "../../../types"
 import styles from "./style.module.scss"
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import ButtonConfig from "../../../components/button/ButtonConfig";
 import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
@@ -23,29 +23,28 @@ export const ItemCart: React.FC<ItemCartProps> = ({
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
-    const [quantity, setQuantity] = useState<number>(item?.quantity);
 
     const handlePlus = useCallback(() => {
-        setQuantity(quantity + 1)
         updateQuantityItemIntoCart({
             email_user_cart: current_user.email,
             id_item: item?.id,
-            quantity: quantity
+            plus: true,
+            minus: false,
+        }).then(() => {
+            getDetailCart(dispatch, current_user?.email)
         })
-        getDetailCart(dispatch, current_user?.email)
-    },[quantity, setQuantity, dispatch])
+    },[ dispatch])
 
     const handleMinus = useCallback(() => {
-        if(quantity > 1) {
-            setQuantity(quantity - 1)
-        }
         updateQuantityItemIntoCart({
             email_user_cart: current_user.email,
             id_item: item?.id,
-            quantity: quantity
+            plus: false,
+            minus: true,
+        }).then(() => {
+            getDetailCart(dispatch, current_user?.email)
         })
-        getDetailCart(dispatch, current_user?.email)
-    },[quantity, setQuantity, dispatch])
+    },[ dispatch])
 
     const handleRemoveItemCart = useCallback(() => {
         removeItemIntoCart({
@@ -84,7 +83,7 @@ export const ItemCart: React.FC<ItemCartProps> = ({
                         <Col span={14}>
                             <Text 
                                 className={styles.name}
-                                onClick={() => navigate('/item_detail/abc')}
+                                onClick={() => navigate(`/item_detail/${item?.id}`)}
                             >{item?.name}</Text>
                         </Col>
                         <Col span={9}>

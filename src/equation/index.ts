@@ -9,3 +9,13 @@ export const handleTotalPrice = (data: any[]) => {
 
     return total;
 }
+
+export const handleTakeId = (data: any[]) => {
+    let array: string[] = [];
+
+    data?.forEach((item: any) => {
+        array?.push(item?.id)
+    })
+
+    return array;
+}

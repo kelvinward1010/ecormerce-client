@@ -36,7 +36,8 @@ export const removeItemIntoCart = async (data: RemoveItemInCart): Promise<any> =
 interface UpdateQuantityItemIntoCart {
     email_user_cart: string,
     id_item?: string,
-    quantity?: number
+    plus?: boolean
+    minus?: boolean
 }
 
 export const updateQuantityItemIntoCart = async (data: UpdateQuantityItemIntoCart): Promise<any> => {

@@ -12,18 +12,14 @@ export const orderSlice = createSlice({
     name: 'orders',
     initialState,
     reducers: {
-        additem: (state, action) => {
+        items_update: (state, action) => {
             state.items_order = action.payload;
-        },
-        removeitem: (state, action) => {
-            const item_add = action.payload;
-            state.items_order.filter((item: any) => item?.id !== item_add?.id);
         },
     },
 });
 
 export const {
-    additem,
+    items_update,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
