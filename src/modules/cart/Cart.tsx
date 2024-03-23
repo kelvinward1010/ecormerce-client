@@ -44,7 +44,7 @@ export function Cart() {
                                 data={item} 
                                 key={item?.id}
                                 checked={() => {
-                                    const find_item = items_order.find((i: any) => i.id === item.id)
+                                    const find_item = items_order?.find((i: any) => i.id === item.id)
                                     return find_item ? true : false
                                 }}
                             />

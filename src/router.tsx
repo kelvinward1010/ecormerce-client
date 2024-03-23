@@ -1,40 +1,53 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Error, Layout } from "./components";
 import { Cart, Home, ItemDetail, ItemsDelivered, ItemsOrdered, Signin, Signup } from "./modules";
 import { cartUrl, homeUrl, itemsDeliveredUrl, itemsDetailUrl, itemsOrderedUrl, signinUrl, signupUrl } from "./urls";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux/store";
 
 
+
+interface RouteProps {
+    children: React.ReactNode;
+}
+
+const ProtectedRoute: React.FC<RouteProps> = ({
+    children
+}) => {
+    const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+    return isAuthenticated ? <>{children}</> : <Navigate to={signinUrl} replace />
+}
 
 
 
 export const routerConfig = createBrowserRouter([
     {
         path: "/",
-        element: <Layout />,
+        errorElement: <Error />,
+        element: (
+            <ProtectedRoute>
+                <Layout />
+            </ProtectedRoute>
+        ),
         children: [
             {
                 path: homeUrl,
-                errorElement: <Error />,
                 element: <Home />
             },
             {
                 path: cartUrl,
-                errorElement: <Error />,
                 element: <Cart />
             },
             {
                 path: itemsOrderedUrl,
-                errorElement: <Error />,
                 element: <ItemsOrdered />
             },
             {
                 path: itemsDeliveredUrl,
-                errorElement: <Error />,
                 element: <ItemsDelivered />
             },
             {
                 path: itemsDetailUrl,
-                errorElement: <Error />,
                 element: <ItemDetail />
             },
         ]
