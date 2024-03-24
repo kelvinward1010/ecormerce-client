@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Profile from "./profile/Profile";
 import { getDetailCart } from "../../redux/actions/cartAction";
-import { itemsDeliveredUrl, itemsOrderedUrl, signinUrl, signupUrl } from "../../urls";
+import { itemsDeliveredUrl, itemsOrderedUrl, signinUrl } from "../../urls";
 
 
 function Header() {
