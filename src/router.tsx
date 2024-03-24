@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<RouteProps> = ({
     children
 }) => {
     const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
-    return isAuthenticated ? <>{children}</> : <Navigate to={signinUrl} replace />
+    return isAuthenticated ? <>{children}</> : <Navigate to={homeUrl} replace />
 }
 
 
@@ -24,11 +24,7 @@ export const routerConfig = createBrowserRouter([
     {
         path: "/",
         errorElement: <Error />,
-        element: (
-            <ProtectedRoute>
-                <Layout />
-            </ProtectedRoute>
-        ),
+        element: <Layout />,
         children: [
             {
                 path: homeUrl,
@@ -36,15 +32,27 @@ export const routerConfig = createBrowserRouter([
             },
             {
                 path: cartUrl,
-                element: <Cart />
+                element: (
+                    <ProtectedRoute>
+                        <Cart />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: itemsOrderedUrl,
-                element: <ItemsOrdered />
+                element: (
+                    <ProtectedRoute>
+                        <ItemsOrdered />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: itemsDeliveredUrl,
-                element: <ItemsDelivered />
+                element: (
+                    <ProtectedRoute>
+                        <ItemsDelivered />
+                    </ProtectedRoute>
+                )
             },
             {
                 path: itemsDetailUrl,

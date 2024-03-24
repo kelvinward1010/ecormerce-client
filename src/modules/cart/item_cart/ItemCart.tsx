@@ -57,7 +57,7 @@ export const ItemCart: React.FC<ItemCartProps> = ({
                 <CheckCircleOutlined className="done" />
               )
             })
-            getDetailCart(dispatch, current_user.email)
+            getDetailCart(dispatch, current_user?.email)
         }).catch((error) => {
             notification.error({
               message: `Could not remove item in cart. Please try again!`,

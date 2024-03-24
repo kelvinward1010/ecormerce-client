@@ -3,20 +3,24 @@ import styles from "./style.module.scss";
 import ButtonConfig from "../../components/button/ButtonConfig";
 import { useCallback, useEffect, useState } from "react";
 import { CheckCircleOutlined, MinusOutlined, PlusOutlined, WarningOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDetailItem } from "../../services/item";
 import { useDispatch, useSelector } from "react-redux";
 import { addItemIntoCart } from "../../services/cart";
 import { RootState } from "../../redux/store";
 import { getDetailCart } from "../../redux/actions/cartAction";
+import { NotificationConfig } from "../../components";
+import { signinUrl } from "../../urls";
 
 const { Text } = Typography;
 
 export function ItemDetail() {
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const idParams = useParams().id;
     const [data, setData] = useState<any>();
+    const [isOpenWarning, setIsOpenWarning] = useState(false);
     const current_user = useSelector((state: RootState) => state.auth.currentUser);
     const [quantity, setQuantity] = useState<number>(1);
 
@@ -51,7 +55,7 @@ export function ItemDetail() {
                 <CheckCircleOutlined className="done" />
               )
             })
-            getDetailCart(dispatch, current_user.email)
+            {current_user && getDetailCart(dispatch, current_user?.email)}
         }).catch((error) => {
             notification.error({
               message: `Could not add to cart. Please try again!`,
@@ -61,56 +65,89 @@ export function ItemDetail() {
               )
             })
         })
-    },[data, quantity])
+    },[data, quantity]);
+
+    const handleWarningSignIn = () => {
+        setIsOpenWarning(true);
+    }
+
+    const handleConfirmWarning = () => {
+        navigate(signinUrl)
+        setIsOpenWarning(false);
+    }
+
+    const handleCancelWarning = () => {
+        setIsOpenWarning(false);
+    }
 
     return (
-        <div className={styles.container}>
-            <Row justify={'space-between'}>
-                <Col span={10} className={styles.left}>
-                    <img 
-                        src={data?.image} 
-                        alt="img" 
-                        className={styles.img}
-                    />
-                </Col>
-                <Col span={12} className={styles.right}>
-                    <Typography.Title level={4} className={styles.title}>
-                        {data?.name}
-                    </Typography.Title>
-                    <Text className={styles.description}>
-                        {data?.description}
-                    </Text>
-                    <Text>Price:  {data?.price}$</Text>
-                    <Rate
-                        allowHalf 
-                        defaultValue={2.5} 
-                        className={styles.rate}
-                    />
-                    <Text>Number of item in stock: {data?.amount_in_stock}</Text>
-                    <div className={styles.quantity}>
-                        <ButtonConfig
-                            type={'fullbg'}
-                            onClick={handleMinus}
-                            icon={<MinusOutlined />}
-                            with={'fit-content'}
+        <>
+            <NotificationConfig 
+                label_1="Warning"
+                label_2="Please sign in to continue!"
+                isOpen={isOpenWarning}
+                setIsOpen={setIsOpenWarning}
+                labelActionConfirm="Sign In"
+                handleActionCancel={handleCancelWarning}
+                handleActionConfirm={handleConfirmWarning}
+            />
+            <div className={styles.container}>
+                <Row justify={'space-between'}>
+                    <Col span={10} className={styles.left}>
+                        <img 
+                            src={data?.image} 
+                            alt="img" 
+                            className={styles.img}
                         />
-                        <Text className={styles.quantity_number}>{quantity}</Text>
-                        <ButtonConfig
-                            type={'fullbg'}
-                            onClick={handlePlus}
-                            icon={<PlusOutlined />}
-                            with={'fit-content'}
+                    </Col>
+                    <Col span={12} className={styles.right}>
+                        <Typography.Title level={4} className={styles.title}>
+                            {data?.name}
+                        </Typography.Title>
+                        <Text className={styles.description}>
+                            {data?.description}
+                        </Text>
+                        <Text>Price:  {data?.price}$</Text>
+                        <Rate
+                            allowHalf 
+                            defaultValue={2.5} 
+                            className={styles.rate}
                         />
-                    </div>
-                    <div className={styles.add_cart}>
-                        <ButtonConfig
-                            onClick={handleAddToCart}
-                            name="Add to cart"
-                            type={'fullbg'}
-                        />
-                    </div>
-                </Col>
-            </Row>
-        </div>
+                        <Text>Number of item in stock: {data?.amount_in_stock}</Text>
+                        <div className={styles.quantity}>
+                            <ButtonConfig
+                                type={'fullbg'}
+                                onClick={handleMinus}
+                                icon={<MinusOutlined />}
+                                with={'fit-content'}
+                            />
+                            <Text className={styles.quantity_number}>{quantity}</Text>
+                            <ButtonConfig
+                                type={'fullbg'}
+                                onClick={handlePlus}
+                                icon={<PlusOutlined />}
+                                with={'fit-content'}
+                            />
+                        </div>
+                        <div className={styles.add_cart}>
+                            {current_user ? (
+                                <ButtonConfig
+                                    onClick={handleAddToCart}
+                                    name="Add to cart"
+                                    type={'fullbg'}
+                                />
+                            ):(
+                                <ButtonConfig
+                                    onClick={handleWarningSignIn}
+                                    name={'Sign In to add your card!'}
+                                    type="fullbg"
+                                    background={'orange'}
+                                />
+                            )}
+                        </div>
+                    </Col>
+                </Row>
+            </div>
+        </>
     )
 }

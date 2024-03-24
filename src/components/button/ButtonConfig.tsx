@@ -6,8 +6,12 @@ interface Props{
     onClick?: () => void;
     type?: "delete" | "normal" | "fullbg";
     icon?: any;
-    with?: any;
-    background?: any;
+    with?: string;
+    height?: number;
+    background?: string;
+    color?: string;
+    ml?: number;
+    mr?: number;
 }
 
 
@@ -24,8 +28,12 @@ function ButtonConfig(props: Props):JSX.Element {
                 styles.buttonconfigfullbg
             }
             style={{
-                width: `${props.with}`,
-                background: `${props.background}`
+                width: `${props.with ?? "100%"}`,
+                height: `${props.height}px`,
+                background: `${props.background}`,
+                color: `${props.color}`,
+                marginLeft: `${props.ml}px`,
+                marginRight: `${props.mr}px`,
             }}
         >
             {props.name}

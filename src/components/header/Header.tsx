@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import Profile from "./profile/Profile";
 import { getDetailCart } from "../../redux/actions/cartAction";
+import { itemsDeliveredUrl, itemsOrderedUrl, signinUrl, signupUrl } from "../../urls";
 
 
 function Header() {
@@ -23,8 +24,8 @@ function Header() {
     const items_cart = useSelector((state: RootState) => state.carts.carts);
 
     useEffect(() => {
-        getDetailCart(dispatch, current_user.email)
-    },[dispatch])
+        {current_user && getDetailCart(dispatch, current_user?.email)}
+    },[dispatch, current_user])
 
     const handleLogout = () => {
         signOut(dispatch).then(() => {
@@ -34,7 +35,6 @@ function Header() {
                     <CheckCircleOutlined className="done" />
                 )
             })
-            navigate('/sign_in')
         }).catch((error) => {
             notification.error({
                 message: `Could not logout. Please try again!`,
@@ -51,7 +51,7 @@ function Header() {
             label: <>
                 <ButtonConfig
                     type={'fullbg'}
-                    onClick={() => navigate('/items_ordered')}
+                    onClick={() => navigate(itemsOrderedUrl)}
                     name="Items ordered"
                 />
             </>,
@@ -61,7 +61,7 @@ function Header() {
             label: <>
                 <ButtonConfig
                     type={'fullbg'}
-                    onClick={() => navigate('/items_delivered')}
+                    onClick={() => navigate(itemsDeliveredUrl)}
                     name="Items delivered"
                 />
             </>,
@@ -117,24 +117,37 @@ function Header() {
                     <h5>Ecormerce</h5>
                 </div>
                 <div className={styles.header_right}>
-                    <Badge
-                        count={items_cart?.carts?.length}
-                        size="small"
-                        className={styles.cart}
-                    >
-                        <IconShoppingCart
-                            color="white"
-                            onClick={() => navigate('/cart')}
-                        />
-                    </Badge>
-                    <Dropdown
-                        menu={{
-                            items,
-                        }}
-                        trigger={['click']}
-                    >
-                        <Avatar className={styles.avatar} src={current_user?.image ?? null} icon={<UserOutlined />} />
-                    </Dropdown>
+                    {current_user ? (
+                        <>
+                            <Badge
+                                count={items_cart?.carts?.length}
+                                size="small"
+                                className={styles.cart}
+                            >
+                                <IconShoppingCart
+                                    color="white"
+                                    onClick={() => navigate('/cart')}
+                                />
+                            </Badge>
+                            <Dropdown
+                                menu={{
+                                    items,
+                                }}
+                                trigger={['click']}
+                            >
+                                <Avatar className={styles.avatar} src={current_user?.image ?? null} icon={<UserOutlined />} />
+                            </Dropdown>
+                        </>
+                    ):(
+                        <>
+                            <ButtonConfig
+                                name="Sign In"
+                                background={'white'}
+                                color={'teal'}
+                                onClick={() => navigate(signinUrl)}
+                            />
+                        </>
+                    )}
                 </div>
             </div>
         </>

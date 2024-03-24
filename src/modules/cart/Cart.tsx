@@ -24,8 +24,8 @@ export function Cart() {
     const [checkedList, setCheckedList] = useState<CheckboxValueType[]>(items_order)
 
     useEffect(() => {
-        getDetailCart(dispatch, current_user?.email)
-    }, [dispatch])
+        {current_user && getDetailCart(dispatch, current_user?.email)}
+    }, [dispatch, current_user])
 
     const onChange: GetProp<typeof Checkbox.Group, 'onChange'> = useCallback((checkedValues) => {
         let prices = handleTotalPrice(checkedValues)

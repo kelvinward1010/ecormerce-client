@@ -160,7 +160,7 @@ export function Signup() {
 
                 <div className={styles.have_account}>
                     <Text>Have a account!</Text>
-                    <Text onClick={() => navigate('/sign_in')} className={styles.fix_text}>Sign Up</Text>
+                    <Text onClick={() => navigate('/sign_in')} className={styles.fix_text}>Sign In</Text>
                 </div>
             </div>
         </div>
