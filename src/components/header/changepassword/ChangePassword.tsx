@@ -174,7 +174,7 @@ function ChangePassword(props: Props) {
 
     return (
         <Modal
-            title={`Change Password of ${props.current_user?.name}`}
+            title={`Change Password`}
             open={props.isOpen} 
             onCancel={() => props.setIsOpen(false)}
             width={700}

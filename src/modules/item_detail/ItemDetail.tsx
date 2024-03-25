@@ -11,6 +11,7 @@ import { RootState } from "../../redux/store";
 import { getDetailCart } from "../../redux/actions/cartAction";
 import { NotificationConfig } from "../../components";
 import { signinUrl } from "../../urls";
+import FormComment from "./components/form_comment/FormComment";
 
 const { Text } = Typography;
 
@@ -92,15 +93,15 @@ export function ItemDetail() {
                 handleActionConfirm={handleConfirmWarning}
             />
             <div className={styles.container}>
-                <Row justify={'space-between'}>
-                    <Col span={10} className={styles.left}>
+                <Row justify={'space-between'} wrap={true}>
+                    <Col span={24} sm={10} className={styles.left}>
                         <img 
                             src={data?.image} 
                             alt="img" 
                             className={styles.img}
                         />
                     </Col>
-                    <Col span={12} className={styles.right}>
+                    <Col span={24} sm={12} className={styles.right}>
                         <Typography.Title level={4} className={styles.title}>
                             {data?.name}
                         </Typography.Title>
@@ -147,6 +148,10 @@ export function ItemDetail() {
                         </div>
                     </Col>
                 </Row>
+
+                <div className={styles.container_comments}>
+                    <FormComment />
+                </div>
             </div>
         </>
     )

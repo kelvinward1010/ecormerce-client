@@ -1,17 +1,29 @@
 .container{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 
-    .button{
-        background: white;
-        color: teal;
-        border: 1px solid teal;
+    .avatar{
+        width: 30%;
     }
 
-    .button:hover{
-        background: teal;
-        color: white !important;
-    }
-
-    .button_reset{
-        margin-left: 10px;
+    .formmain{
+        width: 70%;
+        
+        .button{
+            background: white;
+            color: teal;
+            border: 1px solid teal;
+        }
+    
+        .button:hover{
+            background: teal;
+            color: white !important;
+        }
+    
+        .button_reset{
+            margin-left: 10px;
+        }
     }
 }

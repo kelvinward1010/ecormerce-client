@@ -1,6 +1,7 @@
 import { Col, Flex, Modal, Row, Typography } from 'antd';
 import styles from './style.module.scss';
 import ButtonConfig from '../../button/ButtonConfig';
+import { WarningOutlined } from '@ant-design/icons';
 
 const { Text } = Typography;
 
@@ -33,7 +34,7 @@ export const NotificationConfig: React.FC<ModalProps> = ({
                 open={isOpen} 
                 onCancel={() => setIsOpen(false)}
                 width={700}
-                className="ant_modal"
+                className="ant_modal_warning"
                 footer={null}
             >
                 <div className={styles.container}>
@@ -45,6 +46,7 @@ export const NotificationConfig: React.FC<ModalProps> = ({
                         justify={'center'} 
                         align={'center'}
                     >
+                        <WarningOutlined className={styles.icon_warning} />
                         <Text 
                             type={'warning'}
                             style={{

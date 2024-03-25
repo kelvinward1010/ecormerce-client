@@ -68,6 +68,24 @@
 }
 
 
+/*Header config warning modal antd*/
+.ant_modal_warning .ant-modal-header{
+  padding: 15px 25px;
+  margin: -20px -25px 20px -24px;
+  background: orange;
+  color: white;
+}
+
+.ant_modal_warning .ant-modal-title, .ant_modal_warning .ant-modal-close{
+  color: white;
+}
+
+.ant_modal_warning .ant-modal-close:hover{
+  color: orange;
+  background: white;
+}
+
+
 
 .warning{
   color: red;

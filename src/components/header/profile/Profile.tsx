@@ -1,8 +1,8 @@
 
-import { Button, Form, Input, Modal, notification } from "antd";
+import { Avatar, Button, Form, Input, Modal, notification } from "antd";
 import styles from "./style.module.scss";
 import { useState } from "react";
-import { CheckCircleOutlined, WarningOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, UserOutlined, WarningOutlined } from "@ant-design/icons";
 import { update_profile } from "../../../redux/actions/authAction";
 import { useDispatch } from "react-redux";
 
@@ -54,6 +54,7 @@ const CustomizedForm: React.FC<CustomizedFormProps> = ({ onChange, fields, onFai
             "email": fields.find(value => value?.value != null && value?.name == "email")?.value,
             "image": fields.find(value => value?.value != null && value?.name == "image")?.value,
         }}
+        className={styles.formmain}
     >
         <Form.Item
             name="name"
@@ -145,7 +146,7 @@ function Profile(props: Props) {
 
     return (
         <Modal
-            title={`Change Password of ${props.current_user?.name}`}
+            title={`Profile`}
             open={props.isOpen} 
             onCancel={() => props.setIsOpen(false)}
             width={700}
@@ -153,6 +154,12 @@ function Profile(props: Props) {
             footer={null}
         >
             <div className={styles.container}>
+                <Avatar 
+                    size={120} 
+                    icon={<UserOutlined />}  
+                    src={props?.current_user?.image}
+                    className={styles.avatar}
+                />
                 <CustomizedForm
                     fields={fields}
                     onChange={(newFields) => {
